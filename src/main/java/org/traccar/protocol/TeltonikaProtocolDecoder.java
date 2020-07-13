@@ -275,7 +275,7 @@ public class TeltonikaProtocolDecoder extends BaseProtocolDecoder {
                 position.set(Position.KEY_RPM, readValue(buf, length, false));
                 break;
             case 90:
-                long value=readValue(buf, length, false);
+                long value = readValue(buf, length, false);
                 position.set(Position.KEY_DOOR, value);
                 position.set("dFrontLeft", (BitUtil.check(value, 8)));
                 position.set("dFrontRight", (BitUtil.check(value, 9)));
