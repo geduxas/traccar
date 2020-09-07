@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Anton Tananaev (anton@traccar.org)
+ * Copyright 2019 - 2020 Anton Tananaev (anton@traccar.org)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -428,6 +428,13 @@ public final class Keys {
      */
     public static final ConfigKey WEB_DISABLE_HEALTH_CHECK = new ConfigKey(
             "web.disableHealthCheck", Boolean.class);
+
+    /**
+     * Sets SameSite cookie attribute value.
+     * Supported options: Lax, Strict, None.
+     */
+    public static final ConfigKey WEB_SAME_SITE_COOKIE = new ConfigKey(
+            "web.sameSiteCookie", String.class);
 
     private Keys() {
     }
