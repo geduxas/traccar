@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 - 2018 Anton Tananaev (anton@traccar.org)
+ * Copyright 2016 - 2020 Anton Tananaev (anton@traccar.org)
  * Copyright 2016 - 2017 Andrey Kunitsyn (andrey@traccar.org)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -97,7 +97,7 @@ public final class ReportUtils {
         double firstOdometer = firstPosition.getDouble(Position.KEY_ODOMETER);
         double lastOdometer = lastPosition.getDouble(Position.KEY_ODOMETER);
 
-        if (useOdometer && (firstOdometer != 0.0 || lastOdometer != 0.0)) {
+        if (useOdometer && firstOdometer != 0.0 && lastOdometer != 0.0) {
             distance = lastOdometer - firstOdometer;
         } else if (firstPosition.getAttributes().containsKey(Position.KEY_TOTAL_DISTANCE)
                 && lastPosition.getAttributes().containsKey(Position.KEY_TOTAL_DISTANCE)) {
@@ -263,21 +263,10 @@ public final class ReportUtils {
         stop.setDuration(stopDuration);
         stop.setSpentFuel(calculateFuel(startStop, endStop));
 
-        long engineHours = 0;
         if (startStop.getAttributes().containsKey(Position.KEY_HOURS)
                 && endStop.getAttributes().containsKey(Position.KEY_HOURS)) {
-            engineHours = endStop.getLong(Position.KEY_HOURS) - startStop.getLong(Position.KEY_HOURS);
-        } else if (Context.getConfig().getBoolean("processing.engineHours.enable")) {
-            // Temporary fallback for old data, to be removed in May 2019
-            for (int i = startIndex + 1; i <= endIndex; i++) {
-                if (positions.get(i).getBoolean(Position.KEY_IGNITION)
-                        && positions.get(i - 1).getBoolean(Position.KEY_IGNITION)) {
-                    engineHours += positions.get(i).getFixTime().getTime()
-                            - positions.get(i - 1).getFixTime().getTime();
-                }
-            }
+            stop.setEngineHours(endStop.getLong(Position.KEY_HOURS) - startStop.getLong(Position.KEY_HOURS));
         }
-        stop.setEngineHours(engineHours);
 
         if (!ignoreOdometer
                 && startStop.getDouble(Position.KEY_ODOMETER) != 0
