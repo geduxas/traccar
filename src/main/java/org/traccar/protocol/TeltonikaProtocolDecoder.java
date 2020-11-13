@@ -208,7 +208,6 @@ public class TeltonikaProtocolDecoder extends BaseProtocolDecoder {
                 position.set(Position.PREFIX_ADC + 2, readValue(buf, length, false));
                 break;
             case 16:
-            case 87:
                 position.set(Position.KEY_ODOMETER, readValue(buf, length, false));
                 break;
             case 17:
@@ -223,14 +222,11 @@ public class TeltonikaProtocolDecoder extends BaseProtocolDecoder {
             case 21:
                 position.set(Position.KEY_RSSI, readValue(buf, length, false));
                 break;
-            case 24:
-                readValue(buf, length, false); // speed
-                break;
             case 25:
             case 26:
             case 27:
             case 28:
-                position.set(Position.PREFIX_TEMP + (id - 20), readValue(buf, length, true) * 0.1);
+                position.set(Position.PREFIX_TEMP + (id - 24), readValue(buf, length, true) * 0.1);
                 break;
             case 66:
                 position.set(Position.KEY_POWER, readValue(buf, length, false) * 0.001);
@@ -238,16 +234,12 @@ public class TeltonikaProtocolDecoder extends BaseProtocolDecoder {
             case 67:
                 position.set(Position.KEY_BATTERY, readValue(buf, length, false) * 0.001);
                 break;
-            case 68:
-                position.set(Position.KEY_BATTERY_CURRENT, readValue(buf, length, false) * 0.001);
-                break;
             case 69:
                 position.set("gpsStatus", readValue(buf, length, false));
                 break;
             case 72:
             case 73:
             case 74:
-            case 75:
                 position.set(Position.PREFIX_TEMP + (id - 71), readValue(buf, length, true) * 0.1);
                 break;
             case 78:
@@ -333,9 +325,6 @@ public class TeltonikaProtocolDecoder extends BaseProtocolDecoder {
                 break;
             case 234:
                 position.set(Position.KEY_CNG_LEVEL, readValue(buf, length, false) * 0.1);
-                break;
-            case 235:
-                position.set("oilLevel", readValue(buf, length, false));
                 break;
             case 236:
                 if (readValue(buf, length, false) == 1) {
