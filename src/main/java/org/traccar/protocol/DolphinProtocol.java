@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 - 2020 Anton Tananaev (anton@traccar.org)
+ * Copyright 2020 Anton Tananaev (anton@traccar.org)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,26 +15,19 @@
  */
 package org.traccar.protocol;
 
-import io.netty.handler.codec.http.HttpObjectAggregator;
-import io.netty.handler.codec.http.HttpRequestDecoder;
-import io.netty.handler.codec.http.HttpResponseEncoder;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import org.traccar.BaseProtocol;
-import org.traccar.Context;
 import org.traccar.PipelineBuilder;
 import org.traccar.TrackerServer;
-import org.traccar.config.Keys;
 
-public class Mta6Protocol extends BaseProtocol {
+public class DolphinProtocol extends BaseProtocol {
 
-    public Mta6Protocol() {
+    public DolphinProtocol() {
         addServer(new TrackerServer(false, getName()) {
             @Override
             protected void addProtocolHandlers(PipelineBuilder pipeline) {
-                pipeline.addLast(new HttpResponseEncoder());
-                pipeline.addLast(new HttpRequestDecoder());
-                pipeline.addLast(new HttpObjectAggregator(65535));
-                pipeline.addLast(new Mta6ProtocolDecoder(
-                        Mta6Protocol.this, !Context.getConfig().getBoolean(Keys.PROTOCOL_CAN.withPrefix(getName()))));
+                pipeline.addLast(new LengthFieldBasedFrameDecoder(1024, 20, 4));
+                pipeline.addLast(new DolphinProtocolDecoder(DolphinProtocol.this));
             }
         });
     }
