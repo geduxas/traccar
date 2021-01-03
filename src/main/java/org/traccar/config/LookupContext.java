@@ -13,17 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.traccar.notificators;
+package org.traccar.config;
 
-import org.traccar.Context;
-import org.traccar.config.Keys;
+public interface LookupContext {
 
-public class NotificatorTraccar extends NotificatorFirebase {
+    class Global implements LookupContext {
+    }
 
-    public NotificatorTraccar() {
-        super(
-                "https://www.traccar.org/push/",
-                Context.getConfig().getString(Keys.NOTIFICATOR_TRACCAR_KEY));
+    class User implements LookupContext {
+
+        private final long userId;
+
+        public long getUserId() {
+            return userId;
+        }
+
+        public User(long userId) {
+            this.userId = userId;
+        }
+
+    }
+
+    class Device implements LookupContext {
+
+        private final long deviceId;
+
+        public long getDeviceId() {
+            return deviceId;
+        }
+
+        public Device(long deviceId) {
+            this.deviceId = deviceId;
+        }
+
     }
 
 }

@@ -19,6 +19,9 @@ import java.util.Collections;
 
 public final class Keys {
 
+    private Keys() {
+    }
+
     /**
      * Network interface for a the protocol. If not specified, server will bind all interfaces.
      */
@@ -42,6 +45,13 @@ public final class Keys {
      */
     public static final ConfigSuffix<Integer> PROTOCOL_TIMEOUT = new ConfigSuffix<>(
             ".timeout",
+            Collections.singletonList(KeyType.GLOBAL));
+
+    /**
+     * Device password. Commonly used in some protocol for sending commands.
+     */
+    public static final ConfigSuffix<String> PROTOCOL_DEVICE_PASSWORD = new ConfigSuffix<>(
+            ".devicePassword",
             Collections.singletonList(KeyType.GLOBAL));
 
     /**
@@ -128,6 +138,13 @@ public final class Keys {
      */
     public static final ConfigSuffix<String> PROTOCOL_FORM = new ConfigSuffix<>(
             ".form",
+            Collections.singletonList(KeyType.GLOBAL));
+
+    /**
+     * Protocol configuration. Required for some devices for decoding incoming data.
+     */
+    public static final ConfigSuffix<String> PROTOCOL_CONFIG = new ConfigSuffix<>(
+            ".config",
             Collections.singletonList(KeyType.GLOBAL));
 
     /**
@@ -454,6 +471,22 @@ public final class Keys {
             Collections.singletonList(KeyType.GLOBAL));
 
     /**
+     * List of protocol names to ignore offline status. Can be useful to not trigger status change when devices are
+     * configured to disconnect after reporting a batch of data.
+     */
+    public static final ConfigKey<String> STATUS_IGNORE_OFFLINE = new ConfigKey<>(
+            "status.ignoreOffline",
+            Collections.singletonList(KeyType.GLOBAL));
+
+    /**
+     * Path to the media folder. Server stores audio, video and photo files in that folder. Sub-folders will be
+     * automatically created for each device by unique id.
+     */
+    public static final ConfigKey<String> MEDIA_PATH = new ConfigKey<>(
+            "media.path",
+            Collections.singletonList(KeyType.GLOBAL));
+
+    /**
      * Optional parameter to specify network interface for web interface to bind to. By default server will bind to all
      * available interfaces.
      */
@@ -467,6 +500,13 @@ public final class Keys {
      */
     public static final ConfigKey<Integer> WEB_PORT = new ConfigKey<>(
             "web.port",
+            Collections.singletonList(KeyType.GLOBAL));
+
+    /**
+     * Path to the web app folder.
+     */
+    public static final ConfigKey<String> WEB_PATH = new ConfigKey<>(
+            "web.path",
             Collections.singletonList(KeyType.GLOBAL));
 
     /**
@@ -498,6 +538,21 @@ public final class Keys {
     public static final ConfigKey<Boolean> WEB_DEBUG = new ConfigKey<>(
             "web.debug",
             Collections.singletonList(KeyType.GLOBAL));
+
+    /**
+     * Cross-origin resource sharing origin header value.
+     */
+    public static final ConfigKey<String> WEB_ORIGIN = new ConfigKey<>(
+            "web.origin",
+            Collections.singletonList(KeyType.GLOBAL));
+
+    /**
+     * Cache control header value. By default resources are cached for one hour.
+     */
+    public static final ConfigKey<String> WEB_CACHE_CONTROL = new ConfigKey<>(
+            "web.cacheControl",
+            Collections.singletonList(KeyType.GLOBAL),
+            "max-age=3600,public");
 
     /**
      * URL to forward positions. Data is passed through URL parameters. For example, {uniqueId} for device identifier,
@@ -630,6 +685,48 @@ public final class Keys {
      */
     public static final ConfigKey<String> SMS_HTTP_TEMPLATE = new ConfigKey<>(
             "sms.http.template",
+            Collections.singletonList(KeyType.GLOBAL));
+
+    /**
+     * Traccar notification API key.
+     */
+    public static final ConfigKey<String> NOTIFICATOR_TRACCAR_KEY = new ConfigKey<>(
+            "notificator.traccar.key",
+            Collections.singletonList(KeyType.GLOBAL));
+
+    /**
+     * Firebase server API key for push notifications.
+     */
+    public static final ConfigKey<String> NOTIFICATOR_FIREBASE_KEY = new ConfigKey<>(
+            "notificator.firebase.key",
+            Collections.singletonList(KeyType.GLOBAL));
+
+    /**
+     * Pushover notification user name.
+     */
+    public static final ConfigKey<String> NOTIFICATOR_PUSHOVER_USER = new ConfigKey<>(
+            "notificator.pushover.user",
+            Collections.singletonList(KeyType.GLOBAL));
+
+    /**
+     * Pushover notification user token.
+     */
+    public static final ConfigKey<String> NOTIFICATOR_PUSHOVER_TOKEN = new ConfigKey<>(
+            "notificator.pushover.token",
+            Collections.singletonList(KeyType.GLOBAL));
+
+    /**
+     * Telegram notification API key.
+     */
+    public static final ConfigKey<String> NOTIFICATOR_TELEGRAM_KEY = new ConfigKey<>(
+            "notificator.telegram.key",
+            Collections.singletonList(KeyType.GLOBAL));
+
+    /**
+     * Telegram notification chat id to post messages to.
+     */
+    public static final ConfigKey<String> NOTIFICATOR_TELEGRAM_CHAT_ID = new ConfigKey<>(
+            "notificator.telegram.chatId",
             Collections.singletonList(KeyType.GLOBAL));
 
     /**
@@ -1109,8 +1206,5 @@ public final class Keys {
             "logger.attributes",
             Collections.singletonList(KeyType.GLOBAL),
             "time,position,speed,course,accuracy,result");
-
-    private Keys() {
-    }
 
 }

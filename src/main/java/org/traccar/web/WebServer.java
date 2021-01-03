@@ -134,11 +134,11 @@ public class WebServer {
 
     private void initWebApp(Config config, ServletContextHandler servletHandler) {
         ServletHolder servletHolder = new ServletHolder(DefaultServlet.class);
-        servletHolder.setInitParameter("resourceBase", new File(config.getString("web.path")).getAbsolutePath());
+        servletHolder.setInitParameter("resourceBase", new File(config.getString(Keys.WEB_PATH)).getAbsolutePath());
         if (config.getBoolean(Keys.WEB_DEBUG)) {
             servletHandler.setWelcomeFiles(new String[] {"debug.html", "index.html"});
         } else {
-            String cache = config.getString("web.cacheControl");
+            String cache = config.getString(Keys.WEB_CACHE_CONTROL);
             if (cache != null && !cache.isEmpty()) {
                 servletHolder.setInitParameter("cacheControl", cache);
             }
@@ -150,10 +150,11 @@ public class WebServer {
     private void initApi(Config config, ServletContextHandler servletHandler) {
         servletHandler.addServlet(new ServletHolder(new AsyncSocketServlet()), "/api/socket");
 
-        if (config.hasKey("media.path")) {
+        String mediaPath = config.getString(Keys.MEDIA_PATH);
+        if (mediaPath != null) {
             ServletHolder servletHolder = new ServletHolder(DefaultServlet.class);
-            servletHolder.setInitParameter("resourceBase", new File(config.getString("media.path")).getAbsolutePath());
-            servletHolder.setInitParameter("dirAllowed", config.getString("media.dirAllowed", "false"));
+            servletHolder.setInitParameter("resourceBase", new File(mediaPath).getAbsolutePath());
+            servletHolder.setInitParameter("dirAllowed", "false");
             servletHolder.setInitParameter("pathInfoOnly", "true");
             servletHandler.addServlet(servletHolder, "/api/media/*");
             servletHandler.addFilter(MediaFilter.class, "/api/media/*", EnumSet.allOf(DispatcherType.class));
