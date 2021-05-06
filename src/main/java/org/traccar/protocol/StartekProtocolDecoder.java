@@ -41,7 +41,7 @@ public class StartekProtocolDecoder extends BaseProtocolDecoder {
             .number("d+,")                       // length
             .number("(d+),")                     // imei
             .number("xxx,")                      // command
-            .number("(d),")                      // event
+            .number("(d+),")                     // event
             .expression("[^,]*,")                // event data
             .number("(dd)(dd)(dd)")              // date (yyymmdd)
             .number("(dd)(dd)(dd),")             // time (hhmmss)
@@ -69,6 +69,22 @@ public class StartekProtocolDecoder extends BaseProtocolDecoder {
             .any()
             .compile();
 
+    private String decodeAlarm(int value) {
+        switch (value) {
+            case 5:
+            case 6:
+                return Position.ALARM_DOOR;
+            case 39:
+                return Position.ALARM_ACCELERATION;
+            case 40:
+                return Position.ALARM_BRAKING;
+            case 41:
+                return Position.ALARM_CORNERING;
+            default:
+                return null;
+        }
+    }
+
     @Override
     protected Object decode(
             Channel channel, SocketAddress remoteAddress, Object msg) throws Exception {
@@ -86,7 +102,9 @@ public class StartekProtocolDecoder extends BaseProtocolDecoder {
         Position position = new Position(getProtocolName());
         position.setDeviceId(deviceSession.getDeviceId());
 
-        position.set(Position.KEY_EVENT, parser.nextInt());
+        int event = parser.nextInt();
+        position.set(Position.KEY_ALARM, decodeAlarm(event));
+        position.set(Position.KEY_EVENT, event);
 
         position.setTime(parser.nextDateTime());
         position.setValid(parser.next().equals("A"));
